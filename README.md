@@ -4,7 +4,13 @@
 
 AMONIX is a user-controlled wallet experience for [Arc](https://docs.arc.io/). It brings everyday payments, assets, and supported DeFi into one app so people can send, receive, request, split, swap, and settle in USDC without assembling a protocol toolkit.
 
-This repository is **public documentation and approved examples only**. The production implementation is privately maintained and is not published here.
+This repository is the **AMONIX Public Edition**. It contains three distinct layers:
+
+1. **Reused production UI/source** — the AMONIX component kit and selected presentation helpers, copied from the private app through an explicit allowlist.
+2. **Demo-only simulated functionality** — `/demo/*` screens and `/api/demo/*` fixture APIs. They never sign, never talk to Circle, and never settle onchain.
+3. **Private production implementation** — the live wallet, auth, and settlement stack. It is **not** in this repository.
+
+The feature matrix later in this README describes **private production on Arc Testnet**, not what the simulated demo executes.
 
 ---
 
@@ -37,7 +43,9 @@ Supported assets, quotes, and DeFi opportunities depend on **routes available at
 
 ---
 
-## Feature matrix
+## Feature matrix (private production)
+
+Statuses below are for the privately maintained AMONIX product on Arc Testnet. The Public Edition demo only *presents* a subset of those surfaces with fixture data.
 
 | Area | Capability | Status |
 | --- | --- | --- |
@@ -72,6 +80,50 @@ Supported assets, quotes, and DeFi opportunities depend on **routes available at
 | Notifications | In-app events for transfers, requests, splits, and related activity | Implemented |
 | Help / About | In-app product copy and Arc connection status | Implemented |
 | Arc Mainnet | Documented network; not the active product target | Planned |
+
+---
+
+## Public source structure
+
+| Path | What it is |
+| --- | --- |
+| `README.md`, `docs/`, `CHANGELOG.md` | Product documentation |
+| `PUBLISH_MANIFEST` | Explicit allowlist used to sync this repository |
+| `src/components/amonix/` | Production UI primitives (buttons, forms, cards, metrics) |
+| `src/components/shared/` | Safe shared presentation (empty states, receive panel, logo) |
+| `src/components/ui/` | Base controls used by those primitives |
+| `src/components/demo/` | Demo-only adapters (headers, token marks, receipts) |
+| `src/app/demo/` | Simulated Home, Assets, Send, Receive, Swap, Requests, Splits, DeFi, Activity |
+| `src/app/api/demo/` | Fixture JSON APIs labeled `simulated: true` |
+| `src/lib/demo/` | Mock balances and activity |
+
+**Reused from the private app:** AMONIX UI kit, form chrome, feature icons, decimal helpers, and selected presentation components.
+
+**Demo-only:** pages, demo APIs, fixtures, and adapters that replace auth, i18n, and wallet stores.
+
+When an allowlisted private file such as `src/components/amonix/Button.tsx` changes on private `main`, the sync copies **that file only**. Newly added private files are **not** published unless they are added to `PUBLISH_MANIFEST`.
+
+### How to run the public demo
+
+Run these commands from **this repository’s root** (the folder that contains this README). The Public Edition has its own `package.json` and lockfile. Do not install or build it through a parent private app, and do not reuse that app’s `node_modules`.
+
+```bash
+npm install
+npm run dev
+```
+
+Open [http://127.0.0.1:3010](http://127.0.0.1:3010), then **Launch simulated demo**.
+
+`npm run build` produces a production build of the demo only. No Circle credentials, database URL, or wallet device is required. Simulated send posts to `/api/demo/simulate` and returns `{ "simulated": true, "onchain": false }`.
+
+### Demo vs production
+
+| Public Edition | Private production |
+| --- | --- |
+| Mock balances and receipts | Circle User-Controlled Wallet on Arc Testnet |
+| “Simulate send” never hits a chain | User-authorized onchain settlement |
+| No login | Email, X, passkey, App Lock |
+| This GitHub repository | Privately maintained source |
 
 ---
 
@@ -211,15 +263,13 @@ Privacy screens (shield, private send, unshield) exist so the product can presen
 
 ## Tech stack (public)
 
-| Layer | Choice |
-| --- | --- |
-| App | Next.js, React, TypeScript, Tailwind CSS |
-| Wallet | Circle User-Controlled Wallets, Circle App Kit, Circle Programmable Wallets web SDK |
-| Chain | Arc Testnet via standard EVM JSON-RPC (`viem`) |
-| Auth factors | Email OTP (Circle), passkeys (WebAuthn), X |
-| Client state | Zustand, TanStack Query |
-| Cross-chain | Circle CCTP via App Kit when a route is offered |
-| DeFi | Circle App Kit earn/borrow; community Uniswap V2-style pools for some swap/LP |
+| Layer | Public Edition | Production (not in this repo) |
+| --- | --- | --- |
+| App | Next.js, React, TypeScript, Tailwind CSS | Same family |
+| UI | `@/components/amonix` primitives | Same primitives plus private screens |
+| Demo data | In-repo fixtures + `/api/demo/*` | Live portfolio and Activity |
+| Wallet | Not included | Circle User-Controlled Wallets, App Kit |
+| Auth | Not included | Email OTP, X, passkeys, App Lock |
 
 Exact production hosting, data stores, and private services are **not** documented here.
 
@@ -282,6 +332,7 @@ Condensed from confirmed project history (2026). Details in [CHANGELOG.md](CHANG
 | Early Oct 2026 | Earn / Borrow, swap routing, notifications, idle App Lock, bridge |
 | Mid Oct 2026 | Bridge recovery, wallet tracking, payment and Safari auth reliability |
 | 31 Oct 2026 | Unified brand mark, Circle SDK stack alignment, receipt cards without redundant branding |
+| 1 Nov 2026 | Public Edition: UI kit, simulated demo, and allowlisted GitHub sync |
 
 ---
 
@@ -318,6 +369,7 @@ See [docs/ROADMAP.md](docs/ROADMAP.md). Near-term public themes:
 | [docs/FEATURES.md](docs/FEATURES.md) | Capabilities and maturity |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Planned vs shipped |
 | [CHANGELOG.md](CHANGELOG.md) | Confirmed milestones |
+| [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) | Third-party licenses (not an AMONIX OSS grant) |
 
 ---
 
@@ -338,4 +390,6 @@ Do not send mainnet funds, secrets, or recovery phrases to AMONIX channels.
 
 Production source, keys, and private infrastructure remain **privately maintained**.
 
-Unless a `LICENSE` file is added to this public repository, this documentation should be treated as copyright of the AMONIX authors. Approved examples may be added later; they are not a substitute for the private application.
+Original AMONIX source, documentation, and branding in this repository are **all rights reserved** unless the copyright owner adds a `LICENSE` file. No permissive open-source license is granted for that material.
+
+Third-party packages keep their own licenses. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Approved examples may be added later; they are not a substitute for the private application.

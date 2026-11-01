@@ -137,4 +137,10 @@ Yield and borrow rates are market-dependent and **not guaranteed**.
 - Custody of user keys in a “we sign for you” model
 - Production source code in this GitHub repository
 
+## Public Edition demo
+
+This repository includes a **simulated** Next.js app (`/demo/*`) that reuses the AMONIX UI kit. It demonstrates Home, Assets, Send, Receive, Swap, Payment Requests, Split Bills, DeFi, Pay (informational), and Activity receipts.
+
+Every demo API response sets `simulated: true`. Stake is shown as unavailable. Privacy transactions are not offered. None of these screens execute onchain.
+
 For planned work, see [ROADMAP.md](ROADMAP.md).

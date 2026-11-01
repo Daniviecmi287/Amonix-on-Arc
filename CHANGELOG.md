@@ -8,6 +8,12 @@ Format: newest first. Version in the app About screen: **0.1.0**.
 
 ---
 
+## 2026-11-01 — Public Edition source and demo
+
+- Published an allowlisted **Public Edition**: AMONIX UI primitives, selected presentation components, documentation, and a simulated Next.js demo.
+- Demo APIs return fixture data with `simulated: true` and `onchain: false`. They do not submit wallet signatures or chain transactions.
+- Automatic sync to this repository copies only paths listed in `PUBLISH_MANIFEST`.
+
 ## 2026-10-31 — Brand, receipts, Circle SDK
 
 - Unified the AMONIX **symbol (brand mark)** across the signed-in app chrome (header and related surfaces).

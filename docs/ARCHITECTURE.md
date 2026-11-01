@@ -157,4 +157,28 @@ This document does **not** describe key storage, PIN internals, device binding, 
 - Exact contract addresses beyond well-known public Arc USDC documentation
 - Step-by-step exploit, recovery, or admin procedures
 
+## Public Edition in this repository
+
+The public GitHub tree is a **cut of presentation source plus a simulated Next.js demo**. It is not a clone of production.
+
+```mermaid
+flowchart LR
+  Docs[README and docs]
+  Kit[AMONIX UI kit]
+  Demo[Simulated demo screens]
+  Api[Demo fixture APIs]
+  User[Visitor]
+
+  User --> Docs
+  User --> Demo
+  Demo --> Kit
+  Demo --> Api
+```
+
+- **Allowlisted reuse:** `src/components/amonix`, selected `shared`/`ui` modules, feature icons, decimal helpers.
+- **Demo adapters:** pages under `src/app/demo`, fixtures, `/api/demo/*`.
+- **Never published here:** Circle signing, OTP, passkeys, sessions, databases, or live execution.
+
+Sync from the private repository uses `PUBLISH_MANIFEST` only. Files that are not listed are not copied.
+
 For product capability detail, see [FEATURES.md](FEATURES.md). For what is not shipped yet, see [ROADMAP.md](ROADMAP.md).
