@@ -21,12 +21,12 @@ export function DetailRow({
   return (
     <div
       className={cn(
-        "py-1.5",
+        "min-h-11 py-2",
         divide && "border-b border-amonix-border/70 last:border-b-0",
         className
       )}
     >
-      <div className="flex items-start justify-between gap-4 text-sm">
+      <div className="flex min-h-7 items-center justify-between gap-4 text-sm">
         <span className="shrink-0 text-amonix-text-muted">{label}</span>
         {tone ? (
           <MetricValue tone={tone} className="min-w-0 max-w-[70%] break-all text-right text-sm">
